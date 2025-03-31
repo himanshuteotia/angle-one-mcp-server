@@ -1,0 +1,91 @@
+{
+  "name": "angle-one-stock-mcp",
+  "version": "1.0.0",
+  "description": "A generic MCP for fetching stock data and technical analysis from Angle One API. Compatible with any MCP-supporting platform.",
+  "endpoints": [
+    {
+      "name": "getStockData",
+      "method": "GET",
+      "path": "/api/stock/:symbol",
+      "description": "Get historical stock data and technical indicators",
+      "parameters": [
+        {
+          "name": "symbol",
+          "type": "string",
+          "required": true,
+          "description": "Stock symbol (e.g., RELIANCE, TCS)"
+        },
+        {
+          "name": "period",
+          "type": "string",
+          "required": false,
+          "description": "Data period (e.g., 1M, 3M, 6M, 1Y)",
+          "default": "6M"
+        }
+      ],
+      "response": {
+        "type": "object",
+        "properties": {
+          "historicalData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": { "type": "string" },
+                "open": { "type": "number" },
+                "high": { "type": "number" },
+                "low": { "type": "number" },
+                "close": { "type": "number" },
+                "volume": { "type": "number" }
+              }
+            }
+          },
+          "indicators": {
+            "type": "object",
+            "properties": {
+              "rsi": { "type": "array", "items": { "type": "number" } },
+              "ema20": { "type": "array", "items": { "type": "number" } },
+              "ema50": { "type": "array", "items": { "type": "number" } }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "config": {
+    "baseUrl": "http://localhost:3000",
+    "timeout": 30000,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "platforms": ["cursor", "copilot", "vscode", "claude"],
+    "version": "1.0.0",
+    "author": "Himanshu Teotia",
+    "license": "MIT",
+    "cursor": {
+      "autoComplete": true,
+      "documentation": true,
+      "typeChecking": true,
+      "errorHandling": true,
+      "commandPalette": true,
+      "snippets": true,
+      "keybindings": {
+        "getStockData": "cmd+shift+s"
+      }
+    },
+    "copilot": {
+      "autoComplete": true,
+      "documentation": true,
+      "typeChecking": true,
+      "errorHandling": true
+    },
+    "claude": {
+      "autoComplete": true,
+      "documentation": true,
+      "typeChecking": true,
+      "errorHandling": true,
+      "contextWindow": 100000,
+      "maxTokens": 4096
+    }
+  }
+} 
