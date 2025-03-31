@@ -11,10 +11,16 @@ import {
 } from "../types";
 import { AngleOneAuthentication } from "../angle-one-auth";
 import { getCommonHeaders } from "../common-headers";
+import { ScripMasterService } from "./scripMasterService";
 
 export class StockService {
   private readonly ANGLE_ONE_BASE_URL = "https://apiconnect.angelbroking.com";
   private readonly DEFAULT_PERIOD_MONTHS = 3;
+  private scripMasterService: ScripMasterService;
+
+  constructor() {
+    this.scripMasterService = ScripMasterService.getInstance();
+  }
 
   private getHistoryOptions(
     params: AngleOneHistoryParams,
@@ -40,7 +46,46 @@ export class StockService {
     return isNaN(periodMonths) ? this.DEFAULT_PERIOD_MONTHS : periodMonths;
   }
 
-  async getHistoricalData(symbol: string): Promise<CandleData[]> {
+  async getStockData(
+    symbol: string,
+    period: string = "6"
+  ): Promise<{
+    historicalData: CandleData[];
+    indicators: TechnicalIndicators;
+  }> {
+    try {
+      // Get token from scrip master
+      let token = this.scripMasterService.getTokenBySymbol(symbol);
+      if (!token) {
+        console.log("Symbol not found by symbol");
+        const tokenByName = this.scripMasterService.getTokenByName(symbol);
+        if (!tokenByName) {
+          console.log("Symbol not found by name");
+          throw new Error(`Symbol ${symbol} not found in scrip master`);
+        }
+        token = tokenByName;
+      }
+
+      // Get historical data
+      const historicalData = await this.getHistoricalData("3045", period);
+
+      // Calculate indicators
+      const indicators = this.calculateIndicators(historicalData);
+
+      return {
+        historicalData,
+        indicators,
+      };
+    } catch (error) {
+      console.error("Error in getStockData:", error);
+      throw error;
+    }
+  }
+
+  async getHistoricalData(
+    symbol: string,
+    period: string = "6"
+  ): Promise<CandleData[]> {
     const angleOneAuth = new AngleOneAuthentication();
     const accessToken = await angleOneAuth.generateToken();
 
@@ -48,7 +93,7 @@ export class StockService {
       throw new Error("Access token not available");
     }
 
-    const periodMonths = this.getDataPeriodMonths();
+    const periodMonths = parseInt(period) || this.getDataPeriodMonths();
     const params: AngleOneHistoryParams = {
       exchange: ExchangeTypes.NSE,
       symboltoken: symbol,
