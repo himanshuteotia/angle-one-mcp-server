@@ -85,16 +85,7 @@
       "typeChecking": true,
       "errorHandling": true,
       "contextWindow": 100000,
-      "maxTokens": 4096,
-      "ui": {
-        "buttons": ["Edit Config", "Get Started"],
-        "configSection": "MCP"
-      },
-      "features": {
-        "contextAwareSuggestions": true,
-        "inlineDocumentation": true,
-        "typeInference": true
-      }
+      "maxTokens": 4096
     }
   }
 } 

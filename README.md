@@ -175,10 +175,11 @@ This API is available as a generic MCP that can be used with any platform suppor
    ```
 
 2. **Add to Claude AI**
-   - Open Claude AI settings
-   - Go to "Extensions" or "MCP" section
-   - Click "Add Custom MCP"
+   - Open Claude AI
+   - Click "Edit Config" button
+   - In the MCP section, click "Add Custom MCP"
    - Upload the `angle-one-stock-mcp.zip` file
+   - Click "Get Started" to initialize the MCP
    - Configure the base URL (default: http://localhost:3000)
 
 3. **Using in Claude AI**
@@ -197,8 +198,15 @@ This API is available as a generic MCP that can be used with any platform suppor
 
 4. **Environment Setup**
    - Make sure your server is running
-   - Configure environment variables in Claude AI settings
+   - Click "Edit Config" to configure environment variables
    - Test the connection using the test button in Claude AI MCP settings
+
+5. **Features in Claude AI**
+   - Auto-completion for API calls
+   - TypeScript type checking
+   - Inline documentation
+   - Error handling with detailed messages
+   - Context-aware suggestions
 
 ### Using the MCP
 
